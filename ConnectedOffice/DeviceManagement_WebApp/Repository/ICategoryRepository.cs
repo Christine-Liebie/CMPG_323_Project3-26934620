@@ -1,6 +1,8 @@
-﻿namespace DeviceManagement_WebApp.Repository
+﻿using DeviceManagement_WebApp.Models;
+
+namespace DeviceManagement_WebApp.Repository
 {
-    public class ICategoryRepository
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
     }
 }
