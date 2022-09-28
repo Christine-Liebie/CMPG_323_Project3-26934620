@@ -12,7 +12,7 @@ using DeviceManagement_WebApp.Repository;
 
 namespace DeviceManagement_WebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class DevicesController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -26,13 +26,13 @@ namespace DeviceManagement_WebApp.Controllers
             _zoneRepository = zoneRepository;
         }
 
-        // GET: Devices
+        // GET: retrieve all the Devices records from DB
         public async Task<IActionResult> Index()
         {
             return View(_deviceRepository.GetAll());
         }
 
-        // GET: Devices/Details/5
+        // GET: receive Devices's Details from a record
         public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
@@ -50,7 +50,8 @@ namespace DeviceManagement_WebApp.Controllers
             return View(device);
         }
 
-        // GET: Devices/Create
+        //Add new record to DB
+        // GET part of creating Devices
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_categoryRepository.GetAll(), "CategoryId", "CategoryName");
@@ -58,9 +59,8 @@ namespace DeviceManagement_WebApp.Controllers
             return View();
         }
 
-        // POST: Devices/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Add new record to DB
+        // POST part of creating Devices
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DeviceId,DeviceName,CategoryId,ZoneId,Status,IsActive,DateCreated")] Device device)
@@ -74,7 +74,7 @@ namespace DeviceManagement_WebApp.Controllers
 
         }
 
-        // GET: Devices/Edit/5
+        // GET part of editing Devices
         public async Task<IActionResult> Edit(Guid id)
         {
             if (id == null)
@@ -93,9 +93,7 @@ namespace DeviceManagement_WebApp.Controllers
             return View(device);
         }
 
-        // POST: Devices/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST part of editing Devices
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("DeviceId,DeviceName,CategoryId,ZoneId,Status,IsActive,DateCreated")] Device device)
@@ -124,7 +122,7 @@ namespace DeviceManagement_WebApp.Controllers
 
         }
 
-        // GET: Devices/Delete/5
+        // GET part of deleting Devices
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
@@ -142,7 +140,7 @@ namespace DeviceManagement_WebApp.Controllers
             return View(device);
         }
 
-        // POST: Devices/Delete/5
+        // POST part of deleting Devices
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -153,6 +151,7 @@ namespace DeviceManagement_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Check if Device record exists
         private bool DeviceExists(Guid id)
         {
             Device device = _deviceRepository.GetById(id);

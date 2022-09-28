@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using DeviceManagement_WebApp.Data;
 using DeviceManagement_WebApp.Models;
 using DeviceManagement_WebApp.Repository;
 
 namespace DeviceManagement_WebApp.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _categoriesRepository;
@@ -20,13 +22,13 @@ namespace DeviceManagement_WebApp.Controllers
             _categoriesRepository = categoryRepository;
         }
 
-        // GET: Categories
+        // GET: retrieve all the Categories records from DB
         public async Task<IActionResult> Index()
         {
             return View(_categoriesRepository.GetAll());
         }
 
-        // GET: Categories/Details/5
+        // GET: receive Categories's Details from a record
         public async Task<IActionResult> Details(Guid id)
         {
             if (id == null)
@@ -44,13 +46,15 @@ namespace DeviceManagement_WebApp.Controllers
             return View(category);
         }
 
-        // GET: Categories/Create
+        //Add new record to DB
+        // GET part of creating Categories
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        //Add new record to DB
+        // POST part of creating Categories
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -63,15 +67,15 @@ namespace DeviceManagement_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET part of editing Categories
+        public async Task<IActionResult> Edit(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = _categoriesRepository;
+            var category = _categoriesRepository.GetById(id);
 
             if (category == null)
             {
@@ -80,7 +84,7 @@ namespace DeviceManagement_WebApp.Controllers
             return View(category);
         }
 
-        // POST: Categories/Edit/5
+        // POST part of editing Categories
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -110,15 +114,15 @@ namespace DeviceManagement_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        // GET part of deleting Categories
+        public async Task<IActionResult> Delete(Guid id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = _categoriesRepository;
+            var category = _categoriesRepository.GetById(id);
 
             if (category == null)
             {
@@ -128,7 +132,7 @@ namespace DeviceManagement_WebApp.Controllers
             return View(category);
         }
 
-        // POST: Categories/Delete/5
+        // POST part of deleting Categories
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
@@ -139,6 +143,7 @@ namespace DeviceManagement_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Check if Category record exists
         private bool CategoryExists(Guid id)
         {
             Category category = _categoriesRepository.GetById(id);
