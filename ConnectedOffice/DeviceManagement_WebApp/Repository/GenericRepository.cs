@@ -39,5 +39,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         _context.Set<T>().RemoveRange(entities);
     }
+    public void Save()
+    {
+        _context.SaveChanges();
+    }
+    public void Update(T entity)
+    {
+        _context.Update(entity);
+    }
 }
 
